@@ -1,0 +1,18 @@
+﻿<Project Sdk="Godot.NET.Sdk/4.3.0">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net7.0</TargetFramework>
+    <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'ios' ">net8.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="data\worlds\testworld\worldgen\definitions\World.json" />
+    <Content Include="data\worlds\testworld\worldgen\Terrain.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\Worlds\TestWorld\WorldGen\Definitions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+</Project>

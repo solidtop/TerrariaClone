@@ -1,0 +1,33 @@
+{
+  "DefaultTile": "Stone",
+  "DefaultFluid": "Stone",
+  "HeightNoise": {
+    "Octaves": 6,
+    "Frequency": 0.2,
+    "Amplitude": 1
+  },
+  "HeightSpline": {
+    "ControlPoints": [
+      {
+        "X": -1,
+        "Y": 140
+      },
+      {
+        "X": -0.1,
+        "Y": 100
+      },
+      {
+        "X": 0.1,
+        "Y": 110
+      },
+      {
+        "X": 0.6,
+        "Y": 70
+      },
+      {
+        "X": 1,
+        "Y": 70
+      }
+    ]
+  }
+}
