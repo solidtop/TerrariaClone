@@ -15,8 +15,8 @@ namespace TerrariaClone.Features.WorldGen.Generators
 
         private readonly TileType[,] _tiles = new TileType[context.Definitions.World.Size.X, context.Definitions.World.Size.Y];
 
-        public event Action<GenerationProgressInfo> ProgressUpdated;
-        public event Action<TileType[,], GenerationPass> PassCompleted;
+        public event Action<WorldGenProgressInfo> ProgressUpdated;
+        public event Action<TileType[,], WorldGenPass> PassCompleted;
         public event Action<TileType[,]> GenerationCompleted;
 
         public async Task Generate()
@@ -33,11 +33,11 @@ namespace TerrariaClone.Features.WorldGen.Generators
             GenerationCompleted?.Invoke(_tiles);
         }
 
-        private void UpdateProgress(GenerationProgressInfo info)
+        private void UpdateProgress(WorldGenProgressInfo info)
         {
             var totalProgress = ((int)info.Pass + info.LocalProgress) / _generators.Count;
 
-            var progressInfo = new GenerationProgressInfo(info.Pass, info.LocalProgress, totalProgress);
+            var progressInfo = new WorldGenProgressInfo(info.Pass, info.LocalProgress, totalProgress);
             ProgressUpdated?.Invoke(progressInfo);
         }
     }

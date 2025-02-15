@@ -1,6 +1,6 @@
 ﻿namespace TerrariaClone.Features.WorldGen.Progress
 {
-    public enum GenerationPass
+    public enum WorldGenPass
     {
         Terrain,
     }

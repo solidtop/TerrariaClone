@@ -8,8 +8,8 @@ namespace TerrariaClone.Features.WorldGen.Generators
 {
     public interface IWorldGenerator
     {
-        event Action<GenerationProgressInfo> ProgressUpdated;
-        GenerationPass Pass { get; }
+        event Action<WorldGenProgressInfo> ProgressUpdated;
+        WorldGenPass Pass { get; }
         Task Generate(TileType[,] tiles, WorldGenContext context);
     }
 }

@@ -11,9 +11,9 @@ namespace TerrariaClone.Features.WorldGen.Generators
     {
         private static readonly MainLoop MainLoop = Engine.GetMainLoop();
 
-        public event Action<GenerationProgressInfo> ProgressUpdated;
+        public event Action<WorldGenProgressInfo> ProgressUpdated;
 
-        public abstract GenerationPass Pass { get; }
+        public abstract WorldGenPass Pass { get; }
         public abstract Task Generate(TileType[,] tiles, WorldGenContext context);
 
         protected static async Task Yield(int index, int chunkSize)
@@ -26,7 +26,7 @@ namespace TerrariaClone.Features.WorldGen.Generators
 
         protected void UpdateProgress(float progress)
         {
-            ProgressUpdated?.Invoke(new GenerationProgressInfo(Pass, progress));
+            ProgressUpdated?.Invoke(new WorldGenProgressInfo(Pass, progress));
         }
     }
 }

@@ -10,7 +10,7 @@ namespace TerrariaClone.Features.WorldGen.Generators
     {
         private const int ChunkSize = 16;
 
-        public override GenerationPass Pass => GenerationPass.Terrain;
+        public override WorldGenPass Pass => WorldGenPass.Terrain;
 
         public override async Task Generate(TileType[,] tiles, WorldGenContext context)
         {

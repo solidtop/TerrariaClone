@@ -10,7 +10,7 @@ namespace TerrariaClone.Features.WorldGen.Debug
         private readonly WorldGenerator _worldGenerator = worldGenerator;
 
         private TileType[,] _tiles;
-        private GenerationPass _currentPass;
+        private WorldGenPass _currentPass;
 
         public override void _Ready()
         {
@@ -18,7 +18,7 @@ namespace TerrariaClone.Features.WorldGen.Debug
             _worldGenerator.ProgressUpdated += PrintProgress;
         }
 
-        private void Render(TileType[,] tiles, GenerationPass pass)
+        private void Render(TileType[,] tiles, WorldGenPass pass)
         {
             _tiles = tiles;
             QueueRedraw();
@@ -58,7 +58,7 @@ namespace TerrariaClone.Features.WorldGen.Debug
             };
         }
 
-        private static void PrintProgress(GenerationProgressInfo info)
+        private static void PrintProgress(WorldGenProgressInfo info)
         {
             GD.Print($"{info.DisplayName}: {Mathf.FloorToInt(info.TotalProgress * 100)}%");
         }
