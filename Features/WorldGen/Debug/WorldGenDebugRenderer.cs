@@ -15,19 +15,15 @@ namespace TerrariaClone.Features.WorldGen.Debug
         public override void _Ready()
         {
             _worldGenerator.GenerationCompleted += Render;
-            //_worldGenerator.ProgressUpdated += PrintProgress;
+            _worldGenerator.ProgressUpdated += PrintProgress;
         }
-
-        private void Render(TileType[,] tiles, WorldGenPass pass)
-        {
-            _tiles = tiles;
-            QueueRedraw();
-        }
-
+      
         private void Render(TileType[,] tiles)
         {
             _tiles = tiles;
             QueueRedraw();
+            GD.Print("Rendered tiles: 100%");
+            GD.Print("Generation completed");
         }
 
         public override void _Draw()
@@ -64,9 +60,9 @@ namespace TerrariaClone.Features.WorldGen.Debug
             };
         }
 
-        private static void PrintProgress(WorldGenProgressInfo info)
+        private static void PrintProgress(WorldGenPass pass, int percentage)
         {
-            GD.Print($"{info.Pass}: {Mathf.FloorToInt(info.TotalProgress * 100)}%");
-        }
+            GD.Print($"{WorldGenPassInfo.GetDescription(pass)}: {percentage}%");
+        }  
     }
 }

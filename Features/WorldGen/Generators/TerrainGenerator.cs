@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿using TerrariaClone.Common.Utilities;
 using TerrariaClone.Features.Tiles;
 using TerrariaClone.Features.WorldGen.Contexts;
 using TerrariaClone.Features.WorldGen.Progress;
@@ -8,24 +8,26 @@ namespace TerrariaClone.Features.WorldGen.Generators
     public partial class TerrainGenerator : WorldGeneratorBase
     {
         public override WorldGenPass Pass => WorldGenPass.Terrain;
-        public override int ChunkSize => 64;
 
-        public override async Task Generate(TileType[,] tiles, WorldGenContext context)
+        private PerlinNoise _heightNoise;
+        private CubicSpline _heightSpline;
+        private PerlinNoise _stoneOffsetNoise;
+
+        public override void Generate(TileType[,] tiles, TileRegion region, WorldGenContext context)
         {
-            var worldSize = context.Definitions.World.Size;
             var surfaceLevel = context.Definitions.World.SurfaceLevel;
             var undergroundLevel = context.Definitions.World.UndergroundLevel;
 
-            var heightNoise = CreateNoise(context.Seed, context.Config.Terrain.HeightNoise);
-            var heightSpline = CreateSpline(context.Config.Terrain.HeightSpline);
-            var stoneOffsetNoise = CreateNoise(context.Seed, context.Config.Terrain.StoneOffsetNoise);
+            _heightNoise ??= CreateNoise(context.Seed, context.Config.Terrain.HeightNoise);
+            _heightSpline ??= CreateSpline(context.Config.Terrain.HeightSpline);
+            _stoneOffsetNoise ??= CreateNoise(context.Seed, context.Config.Terrain.StoneOffsetNoise);
 
-            for (int x = 0; x < worldSize.X; x++)
+            for (int x = region.Start.X; x < region.End.X; x++)
             {
-                var height = heightSpline.Interpolate(heightNoise.Sample1D(x)) + surfaceLevel;
-                var stoneLevel = stoneOffsetNoise.Sample1D(x) + undergroundLevel;
+                var height = _heightSpline.Interpolate(_heightNoise.Sample1D(x)) + surfaceLevel;
+                var stoneLevel = _stoneOffsetNoise.Sample1D(x) + undergroundLevel;
 
-                for (int y = 0; y < worldSize.Y; y++)
+                for (int y = region.Start.Y; y < region.End.Y; y++)
                 {
                     if (y >= height)
                     {
@@ -36,11 +38,6 @@ namespace TerrariaClone.Features.WorldGen.Generators
                         tiles[x, y] = TileType.Air;
                     }
                 }
-
-                await Yield(x, ChunkSize);
-
-                var progress = (float)(x + 1) / worldSize.X;
-                UpdateProgress(progress);
             }
         }
     }

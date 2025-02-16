@@ -7,6 +7,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="data\worlds\testworld\worldgen\definitions\World.json" />
+    <Content Include="data\worlds\testworld\worldgen\Dirt.json" />
+    <Content Include="data\worlds\testworld\worldgen\Stone.json" />
     <Content Include="data\worlds\testworld\worldgen\Terrain.json" />
   </ItemGroup>
   <ItemGroup>
