@@ -7,6 +7,7 @@ namespace TerrariaClone.Features.WorldGen.Progress
         Terrain,
         Stone,
         Dirt,
+        LargeCaves,
     }
 
     public static class WorldGenPassInfo
@@ -16,6 +17,7 @@ namespace TerrariaClone.Features.WorldGen.Progress
             { WorldGenPass.Terrain, "Generating terrain" },
             { WorldGenPass.Stone, "Placing stone in the dirt" },
             { WorldGenPass.Dirt, "Placing dirt in the stone" },
+            { WorldGenPass.LargeCaves, "Generating large caves" },
         };
 
         public static string GetDescription(WorldGenPass pass)

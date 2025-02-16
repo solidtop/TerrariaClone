@@ -1,0 +1,13 @@
+{
+  "CaveNoise": {
+    "Octaves": 4,
+    "Frequency": 4,
+    "Amplitude": 1,
+    "Threshold": 0.4
+  },
+  "OffsetLevelNoise": {
+    "Octaves": 3,
+    "Frequency": 4,
+    "Amplitude": 16
+  }
+}

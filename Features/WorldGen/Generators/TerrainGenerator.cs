@@ -32,7 +32,7 @@ namespace TerrariaClone.Features.WorldGen.Generators
                     if (y >= height)
                     {
                         tiles[x, y] = y < stoneLevel ? TileType.Dirt : TileType.Stone;
-                    }  
+                    }
                     else
                     {
                         tiles[x, y] = TileType.Air;

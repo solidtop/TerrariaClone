@@ -9,12 +9,12 @@ namespace TerrariaClone;
 
 public partial class Main : Node
 {
-	public override void _Ready()
-	{
-		var seed = 12345;
+    public override void _Ready()
+    {
+        var seed = 12345;
 
-		var definitions = WorldDefinitions.Load("./Data/Worlds/TestWorld/WorldGen");
-		var config = WorldGenConfig.Load("./Data/Worlds/TestWorld/WorldGen");
+        var definitions = WorldDefinitions.Load("./Data/Worlds/TestWorld/WorldGen");
+        var config = WorldGenConfig.Load("./Data/Worlds/TestWorld/WorldGen");
 
         var context = new WorldGenContext(seed, definitions, config);
 
@@ -22,6 +22,7 @@ public partial class Main : Node
             new TerrainGenerator(),
             new StoneGenerator(),
             new DirtGenerator(),
+            new LargeCaveGenerator(),
         ], context);
 
         var debugRenderer = new WorldGenDebugRenderer(worldGenerator);

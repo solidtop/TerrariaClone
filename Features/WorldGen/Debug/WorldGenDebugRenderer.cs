@@ -10,14 +10,13 @@ namespace TerrariaClone.Features.WorldGen.Debug
         private readonly WorldGenerator _worldGenerator = worldGenerator;
 
         private TileType[,] _tiles;
-        private WorldGenPass _currentPass;
 
         public override void _Ready()
         {
             _worldGenerator.GenerationCompleted += Render;
             _worldGenerator.ProgressUpdated += PrintProgress;
         }
-      
+
         private void Render(TileType[,] tiles)
         {
             _tiles = tiles;
@@ -28,7 +27,8 @@ namespace TerrariaClone.Features.WorldGen.Debug
 
         public override void _Draw()
         {
-            if (_tiles is null) return;
+            if (_tiles is null)
+                return;
 
             var worldWidth = _tiles.GetLength(0);
             var worldHeight = _tiles.GetLength(1);
@@ -55,7 +55,7 @@ namespace TerrariaClone.Features.WorldGen.Debug
             return tile switch
             {
                 TileType.Stone => new Color("#888C8D"),
-                TileType.Dirt => new Color("#9b7653"), 
+                TileType.Dirt => new Color("#9b7653"),
                 _ => new Color(1f, 1f, 1f),
             };
         }
@@ -63,6 +63,6 @@ namespace TerrariaClone.Features.WorldGen.Debug
         private static void PrintProgress(WorldGenPass pass, int percentage)
         {
             GD.Print($"{WorldGenPassInfo.GetDescription(pass)}: {percentage}%");
-        }  
+        }
     }
 }
