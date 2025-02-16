@@ -18,10 +18,10 @@ public partial class Main : Node
 
         var context = new WorldGenContext(seed, definitions, config);
 
-		var terrainGenerator = new TerrainGenerator();
-
         var worldGenerator = new WorldGenerator([
-            terrainGenerator,
+            new TerrainGenerator(),
+            new StoneGenerator(),
+            new DirtGenerator(),
         ], context);
 
         var debugRenderer = new WorldGenDebugRenderer(worldGenerator);

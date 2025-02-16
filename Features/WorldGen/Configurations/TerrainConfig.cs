@@ -9,5 +9,6 @@ namespace TerrariaClone.Features.WorldGen.Configurations
         public TileType DefaultFluid { get; set; } = TileType.Water;
         public NoiseConfig HeightNoise { get; set; }
         public SplineConfig HeightSpline { get; set; }
+        public NoiseConfig StoneOffsetNoise { get; set; }
     }
 }

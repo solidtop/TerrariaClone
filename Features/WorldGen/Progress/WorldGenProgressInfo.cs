@@ -7,6 +7,6 @@
         public WorldGenPass Pass { get; } = pass;
         public float LocalProgress { get; } = localProgress;
         public float TotalProgress { get; } = totalProgress;
-        public string DisplayName => WorldGenPassNames.GetName(Pass);
+        public string Description => WorldGenPassInfo.GetDescription(Pass);
     }
 }

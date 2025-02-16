@@ -7,4 +7,4 @@ script = ExtResource("1_jsure")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
-zoom = Vector2(0.05, 0.05)
+zoom = Vector2(0.08, 0.08)

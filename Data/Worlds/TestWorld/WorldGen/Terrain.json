@@ -10,24 +10,29 @@
     "ControlPoints": [
       {
         "X": -1,
-        "Y": 140
+        "Y": 40
       },
       {
         "X": -0.1,
-        "Y": 100
+        "Y": 0
       },
       {
         "X": 0.1,
-        "Y": 110
+        "Y": 10
       },
       {
         "X": 0.6,
-        "Y": 70
+        "Y": -40
       },
       {
         "X": 1,
-        "Y": 70
+        "Y": -40
       }
     ]
+  },
+  "StoneOffsetNoise": {
+    "Octaves": 4,
+    "Frequency": 2,
+    "Amplitude": 8
   }
 }

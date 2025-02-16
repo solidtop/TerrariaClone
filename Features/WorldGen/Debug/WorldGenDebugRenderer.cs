@@ -14,11 +14,17 @@ namespace TerrariaClone.Features.WorldGen.Debug
 
         public override void _Ready()
         {
-            _worldGenerator.PassCompleted += Render;
-            _worldGenerator.ProgressUpdated += PrintProgress;
+            _worldGenerator.GenerationCompleted += Render;
+            //_worldGenerator.ProgressUpdated += PrintProgress;
         }
 
         private void Render(TileType[,] tiles, WorldGenPass pass)
+        {
+            _tiles = tiles;
+            QueueRedraw();
+        }
+
+        private void Render(TileType[,] tiles)
         {
             _tiles = tiles;
             QueueRedraw();
@@ -52,15 +58,15 @@ namespace TerrariaClone.Features.WorldGen.Debug
         {
             return tile switch
             {
-                TileType.Stone => new Color(0.5f, 0.5f, 0.5f),
-                TileType.Dirt => new Color(0.6f, 0.4f, 0.2f), 
+                TileType.Stone => new Color("#888C8D"),
+                TileType.Dirt => new Color("#9b7653"), 
                 _ => new Color(1f, 1f, 1f),
             };
         }
 
         private static void PrintProgress(WorldGenProgressInfo info)
         {
-            GD.Print($"{info.DisplayName}: {Mathf.FloorToInt(info.TotalProgress * 100)}%");
+            GD.Print($"{info.Pass}: {Mathf.FloorToInt(info.TotalProgress * 100)}%");
         }
     }
 }

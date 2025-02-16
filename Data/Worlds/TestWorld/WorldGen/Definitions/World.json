@@ -4,5 +4,8 @@
     "X": 1750,
     "Y": 900
   },
-  "SeaLevel": 120
+  "SurfaceLevel": 120,
+  "UndergroundLevel": 200,
+  "CavernLevel": 400,
+  "UnderworldLevel": 700
 }
