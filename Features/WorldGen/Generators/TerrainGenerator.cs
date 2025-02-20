@@ -1,5 +1,6 @@
 ﻿using TerrariaClone.Common.Utilities;
 using TerrariaClone.Features.Tiles;
+using TerrariaClone.Features.World;
 using TerrariaClone.Features.WorldGen.Contexts;
 using TerrariaClone.Features.WorldGen.Progress;
 
@@ -13,7 +14,7 @@ namespace TerrariaClone.Features.WorldGen.Generators
         private CubicSpline _heightSpline;
         private PerlinNoise _stoneOffsetNoise;
 
-        public override void Generate(TileType[,] tiles, TileRegion region, WorldGenContext context)
+        public override void Generate(WorldGenContext context, WorldGenState state, WorldRegion region)
         {
             var surfaceLevel = context.Definitions.World.SurfaceLevel;
             var undergroundLevel = context.Definitions.World.UndergroundLevel;
@@ -31,11 +32,11 @@ namespace TerrariaClone.Features.WorldGen.Generators
                 {
                     if (y >= height)
                     {
-                        tiles[x, y] = y < stoneLevel ? TileType.Dirt : TileType.Stone;
+                        state.Tiles[x, y] = y < stoneLevel ? TileType.Dirt : TileType.Stone;
                     }
                     else
                     {
-                        tiles[x, y] = TileType.Air;
+                        state.Tiles[x, y] = TileType.Air;
                     }
                 }
             }

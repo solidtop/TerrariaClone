@@ -23,9 +23,23 @@ namespace TerrariaClone.Features.Chunks
 
         private Vector2I _lastCameraChunkPosition = new(-1, -1);
 
-        public event Action<List<Chunk>> ChunksLoaded;
+        public event Action<List<Chunk>> ChunksStreamed;
 
-        public async Task LoadChunksAsync(Vector2 cameraPosition)
+        public async Task StreamAsync(Vector2 cameraPosition)
+        {
+            await LoadChunksAsync(cameraPosition);
+            await UnloadChunksAsync(cameraPosition);
+        }
+
+        public void UpdateStreamDistance(Vector2I streamDistance)
+        {
+            _streamDistance = streamDistance;
+
+            _loadDistance = streamDistance.X * streamDistance.X;
+            _unloadDistance = (streamDistance.X + UnloadBufferDistance) * (streamDistance.X + UnloadBufferDistance);
+        }
+
+        private async Task LoadChunksAsync(Vector2 cameraPosition)
         {
             var cameraChunkPosition = GetCameraChunkPosition(cameraPosition);
 
@@ -60,10 +74,10 @@ namespace TerrariaClone.Features.Chunks
             }
 
             var newChunks = await Task.WhenAll(chunkTasks);
-            ChunksLoaded?.Invoke([.. newChunks]);
+            ChunksStreamed?.Invoke([.. newChunks]);
         }
 
-        public async Task UnloadChunksAsync(Vector2 cameraPosition)
+        private async Task UnloadChunksAsync(Vector2 cameraPosition)
         {
             var cameraChunkPosition = GetCameraChunkPosition(cameraPosition);
 
@@ -86,14 +100,6 @@ namespace TerrariaClone.Features.Chunks
             }
 
             await Task.WhenAll(chunkTasks);
-        }
-
-        public void UpdateStreamDistance(Vector2I streamDistance)
-        {
-            _streamDistance = streamDistance;
-
-            _loadDistance = streamDistance.X * streamDistance.X;
-            _unloadDistance = (streamDistance.X + UnloadBufferDistance) * (streamDistance.X + UnloadBufferDistance);
         }
 
         private Chunk LoadChunk(Vector2I chunkPosition)

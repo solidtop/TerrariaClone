@@ -7,7 +7,7 @@ namespace TerrariaClone.Common.Serialization
     {
         public byte[] Serialize<T>(T obj)
         {
-            return MessagePackSerializer.Serialize(obj);
+            return MessagePackSerializer.Serialize(obj, ContractlessStandardResolver.Options);
         }
 
         public T Deserialize<T>(byte[] data)

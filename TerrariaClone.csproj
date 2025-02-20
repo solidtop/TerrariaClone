@@ -12,6 +12,7 @@
     <Content Include="Data\Worlds\TestWorld\WorldGen\LargeCave.json" />
     <Content Include="data\worlds\testworld\worldgen\Stone.json" />
     <Content Include="data\worlds\testworld\worldgen\Terrain.json" />
+    <Content Include="data\worlds\testworld\worldgen\World.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\Worlds\TestWorld\WorldGen\Definitions\" />

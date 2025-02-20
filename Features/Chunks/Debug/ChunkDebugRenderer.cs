@@ -10,7 +10,7 @@ namespace TerrariaClone.Features.Chunks.Debug
 
         public override void _Ready()
         {
-            _chunkStreamer.ChunksLoaded += OnChunksLoaded;
+            _chunkStreamer.ChunksStreamed += OnChunksStreamed;
         }
 
         public override void _Draw()
@@ -24,7 +24,7 @@ namespace TerrariaClone.Features.Chunks.Debug
             }
         }
 
-        private void OnChunksLoaded(List<Chunk> chunks)
+        private void OnChunksStreamed(List<Chunk> chunks)
         {
             _chunksToDraw = chunks;
             QueueRedraw();

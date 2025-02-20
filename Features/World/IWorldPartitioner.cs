@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using Godot;
+using TerrariaClone.Features.Chunks;
 using TerrariaClone.Features.Tiles;
 
-namespace TerrariaClone.Features.Chunks
+namespace TerrariaClone.Features.World
 {
-    public interface IChunkPartitioner
+    public interface IWorldPartitioner
     {
         List<Chunk> Partition(TileType[,] tiles, Vector2I chunkSize);
     }

@@ -1,7 +1,6 @@
 ﻿using Godot;
 using TerrariaClone.Features.Tiles;
 using TerrariaClone.Features.WorldGen.Generators;
-using TerrariaClone.Features.WorldGen.Progress;
 
 namespace TerrariaClone.Features.WorldGen.Debug
 {
@@ -13,16 +12,13 @@ namespace TerrariaClone.Features.WorldGen.Debug
 
         public override void _Ready()
         {
-            _worldGenerator.GenerationCompleted += Render;
-            _worldGenerator.ProgressUpdated += PrintProgress;
+            _worldGenerator.GenerationCompleted += OnGenerationCompleted;
         }
 
-        private void Render(TileType[,] tiles)
+        private void OnGenerationCompleted(TileType[,] tiles)
         {
             _tiles = tiles;
             QueueRedraw();
-            GD.Print("Rendered tiles: 100%");
-            GD.Print("Generation completed");
         }
 
         public override void _Draw()
@@ -58,11 +54,6 @@ namespace TerrariaClone.Features.WorldGen.Debug
                 TileType.Dirt => new Color("#9b7653"),
                 _ => new Color(1f, 1f, 1f),
             };
-        }
-
-        private static void PrintProgress(WorldGenPass pass, int percentage)
-        {
-            GD.Print($"{WorldGenPassInfo.GetDescription(pass)}: {percentage}%");
         }
     }
 }

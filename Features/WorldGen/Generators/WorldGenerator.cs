@@ -4,34 +4,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using Godot;
 using TerrariaClone.Features.Tiles;
+using TerrariaClone.Features.World;
 using TerrariaClone.Features.WorldGen.Contexts;
 using TerrariaClone.Features.WorldGen.Progress;
 
 namespace TerrariaClone.Features.WorldGen.Generators
 {
-    public partial class WorldGenerator
+    public class WorldGenerator(IEnumerable<IWorldGenerator> generators, WorldGenContext context, WorldGenState state)
     {
-        private readonly List<IWorldGenerator> _generators;
-        private readonly WorldGenContext _context;
-        private readonly Vector2I _worldSize;
-        private readonly Vector2I _regionSize;
-
-        private readonly TileType[,] _tiles;
-
-        public WorldGenerator(IEnumerable<IWorldGenerator> generators, WorldGenContext context)
-        {
-            _generators = generators.ToList();
-            _context = context;
-            _worldSize = context.Definitions.World.Size;
-            _regionSize = new Vector2I(_worldSize.X / 50, _worldSize.Y / 50);
-            _tiles = new TileType[_worldSize.X, _worldSize.Y];
-        }
+        private readonly List<IWorldGenerator> _generators = generators.ToList();
+        private readonly WorldGenContext _context = context;
+        private readonly WorldGenState _state = state;
+        private readonly Vector2I _worldSize = context.Definitions.World.Size;
+        private readonly Vector2I _regionSize = context.Config.World.RegionSize;
 
         public event Action<WorldGenPass, int> ProgressUpdated;
-        public event Action<TileType[,], WorldGenPass> PassCompleted;
+        public event Action<WorldGenPass, TileType[,]> PassCompleted;
         public event Action<TileType[,]> GenerationCompleted;
 
-        public async Task Generate()
+        public async Task GenerateAsync()
         {
             foreach (var generator in _generators)
             {
@@ -41,26 +32,28 @@ namespace TerrariaClone.Features.WorldGen.Generators
                 {
                     for (int y = 0; y < _worldSize.Y; y += _regionSize.Y)
                     {
-                        var region = new TileRegion(new Vector2I(x, y), _regionSize);
+                        var region = new WorldRegion(new Vector2I(x, y), _regionSize);
 
                         tasks.Add(Task.Run(() =>
                         {
-                            generator.Generate(_tiles, region, _context);
+                            generator.Generate(_context, _state, region);
                         }));
                     }
                 }
 
                 await Task.WhenAll(tasks);
-                PassCompleted?.Invoke(_tiles, generator.Pass);
+
+                PassCompleted?.Invoke(generator.Pass, _state.Tiles);
                 UpdateProgress(generator.Pass);
             }
 
-            GenerationCompleted?.Invoke(_tiles);
+            GenerationCompleted?.Invoke(_state.Tiles);
         }
 
         private void UpdateProgress(WorldGenPass pass)
         {
-            var percentage = Mathf.FloorToInt(((float)pass / _generators.Count) * 100);
+            // TODO: Progress shouldn't be based on enum
+            var percentage = Mathf.FloorToInt((((float)pass + 1) / _generators.Count) * 100);
             ProgressUpdated?.Invoke(pass, percentage);
         }
     }

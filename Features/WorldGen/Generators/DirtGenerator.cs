@@ -1,5 +1,6 @@
 ﻿using TerrariaClone.Common.Utilities;
 using TerrariaClone.Features.Tiles;
+using TerrariaClone.Features.World;
 using TerrariaClone.Features.WorldGen.Contexts;
 using TerrariaClone.Features.WorldGen.Progress;
 
@@ -11,7 +12,7 @@ namespace TerrariaClone.Features.WorldGen.Generators
 
         private PerlinNoise _noise;
 
-        public override void Generate(TileType[,] tiles, TileRegion region, WorldGenContext context)
+        public override void Generate(WorldGenContext context, WorldGenState state, WorldRegion region)
         {
             var undergroundLevel = context.Definitions.World.UndergroundLevel;
 
@@ -29,7 +30,7 @@ namespace TerrariaClone.Features.WorldGen.Generators
 
                     if (noiseValue > threshold)
                     {
-                        tiles[x, y] = TileType.Dirt;
+                        state.Tiles[x, y] = TileType.Dirt;
                     }
                 }
             }

@@ -18,8 +18,7 @@ namespace TerrariaClone.Features.World
         {
             var cameraPosition = _camera.GlobalPosition;
 
-            _chunkStreamer.LoadChunksAsync(cameraPosition);
-            _chunkStreamer.UnloadChunksAsync(cameraPosition);
+            _chunkStreamer.StreamAsync(cameraPosition);
         }
     }
 }

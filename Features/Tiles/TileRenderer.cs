@@ -1,57 +1,100 @@
-﻿using Godot;
-using Godot.Collections;
+﻿using System.Collections.Generic;
+using Godot;
+using TerrariaClone.Features.World;
 using TerrariaClone.Features.WorldGen.Generators;
 
 namespace TerrariaClone.Features.Tiles
 {
     public partial class TileRenderer(WorldGenerator worldGenerator) : Node
     {
-        private readonly WorldGenerator _worldGenerator = worldGenerator; 
+        private readonly WorldGenerator _worldGenerator = worldGenerator;
 
         private TileMapLayer _terrainLayer;
         private BetterTerrain _terrain;
 
-        private Dictionary<Variant, Variant> _changeset = [];
+        private readonly Queue<Godot.Collections.Dictionary<Vector2I, int>> _cellDataQueue = [];
 
         public override void _Ready()
         {
             _terrainLayer = GetNode<TileMapLayer>("../TileMapLayer");
             _terrain = new(_terrainLayer);
 
-            _worldGenerator.GenerationCompleted += Render;
+            _worldGenerator.GenerationCompleted += OnGenerationCompleted;
         }
 
         public override void _Process(double delta)
         {
-            if (_terrain.IsTerrainChangesetReady(_changeset))
+            if (_cellDataQueue.TryDequeue(out var cellData))
             {
-                _terrain.ApplyTerrainChangeset(_changeset);
+                GD.Print("Creating changeset...");
+                var changeset = _terrain.CreateTerrainChangeset(cellData);
             }
         }
 
-        private void Render(TileType[,] tiles)
+        private void OnGenerationCompleted(TileType[,] tiles)
         {
-            var cellData = new Dictionary<Vector2I, int>();
+            var worldSize = new Vector2I(tiles.GetLength(0), tiles.GetLength(1));
+            var regions = PartitionWorld(worldSize, new(175, 900));
 
-            var worldWidth = tiles.GetLength(0);
-            var worldHeight = tiles.GetLength(1);
-
-            for (int x = 0; x < worldWidth; x++)
+            foreach (var region in regions)
             {
-                for (int y = 0; y < worldHeight; y++)
+                var cellData = new Godot.Collections.Dictionary<Vector2I, int>();
+
+                for (int x = region.Start.X; x < region.End.X; x++)
                 {
-                    var tile = tiles[x, y];
+                    for (int y = region.Start.Y; y < region.End.Y; y++)
+                    {
+                        var tile = tiles[x, y];
 
-                    if (tile == TileType.Air)
-                        continue;
+                        if (tile == TileType.Air)
+                            continue;
 
-                    var cellCoord = new Vector2I(x, y);
-                    var tileId = Tile.GetMetadata(tile).Id;
-                    cellData[cellCoord] = tileId;
+                        var cellCoord = new Vector2I(x, y);
+                        var tileId = Tile.GetMetadata(tile).Id;
+                        cellData[cellCoord] = tileId;
+                    }
+                }
+
+                _cellDataQueue.Enqueue(cellData);
+            }
+
+            //var cellData = new Dictionary<Vector2I, int>();
+
+            //var worldWidth = tiles.GetLength(0);
+            //var worldHeight = tiles.GetLength(1);
+
+            //for (int x = 0; x < worldWidth; x++)
+            //{
+            //    for (int y = 0; y < worldHeight; y++)
+            //    {
+            //        var tile = tiles[x, y];
+
+            //        if (tile == TileType.Air)
+            //            continue;
+
+            //        var cellCoord = new Vector2I(x, y);
+            //        var tileId = Tile.GetMetadata(tile).Id;
+            //        cellData[cellCoord] = tileId;
+            //    }
+            //}
+
+            //_changeset = _terrain.CreateTerrainChangeset(cellData);
+        }
+
+        private List<WorldRegion> PartitionWorld(Vector2I worldSize, Vector2I regionSize)
+        {
+            var regions = new List<WorldRegion>();
+
+            for (int x = 0; x < worldSize.X; x += regionSize.X)
+            {
+                for (int y = 0; y < worldSize.Y; y += regionSize.Y)
+                {
+                    var region = new WorldRegion(new(x, y), regionSize);
+                    regions.Add(region);
                 }
             }
 
-            _changeset = _terrain.CreateTerrainChangeset(cellData);
+            return regions;
         }
     }
 }
