@@ -3,7 +3,7 @@ using Godot;
 using TerrariaClone.Features.Chunks;
 using TerrariaClone.Features.Tiles;
 
-namespace TerrariaClone.Features.WorldGen
+namespace TerrariaClone.Features.WorldGen.State
 {
     public class WorldGenState(Vector2I worldSize)
     {
@@ -11,5 +11,6 @@ namespace TerrariaClone.Features.WorldGen
         public int[] HeightMap { get; set; } = new int[worldSize.X];
 
         public List<Chunk> Chunks { get; set; }
+        public Vector2I PlayerSpawnPoint { get; set; }
     }
 }

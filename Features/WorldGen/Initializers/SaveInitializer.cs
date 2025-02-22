@@ -3,13 +3,13 @@ using System.Threading.Tasks;
 using Godot;
 using TerrariaClone.Features.Chunks.Persistence;
 using TerrariaClone.Features.WorldGen.Contexts;
+using TerrariaClone.Features.WorldGen.State;
 
 namespace TerrariaClone.Features.WorldGen.Initializers
 {
-    public class SaveInitializer(IChunkWriter chunkWriter, string basePath) : IWorldInitializer
+    public class SaveInitializer(IChunkWriter chunkWriter) : IWorldInitializer
     {
         private readonly IChunkWriter _chunkWriter = chunkWriter;
-        private readonly string _basePath = basePath;
 
         public Task InitializeAsync(WorldGenContext context, WorldGenState state)
         {
@@ -24,9 +24,9 @@ namespace TerrariaClone.Features.WorldGen.Initializers
             return Task.CompletedTask;
         }
 
-        private string GetFilePath(Vector2I position)
+        private static string GetFilePath(Vector2I position)
         {
-            return Path.Combine(_basePath, $"chunk_{position.X}_{position.Y}.save");
+            return Path.Combine("user://", $"chunk_{position.X}_{position.Y}.save");
         }
     }
 }

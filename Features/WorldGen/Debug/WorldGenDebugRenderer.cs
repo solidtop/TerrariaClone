@@ -4,9 +4,9 @@ using TerrariaClone.Features.WorldGen.Generators;
 
 namespace TerrariaClone.Features.WorldGen.Debug
 {
-    public partial class WorldGenDebugRenderer(WorldGenerator worldGenerator) : Node2D
+    public partial class WorldGenDebugRenderer : Node2D, IWorldGenDebugger
     {
-        private readonly WorldGenerator _worldGenerator = worldGenerator;
+        private WorldGenerator _worldGenerator;
 
         private TileType[,] _tiles;
 
@@ -54,6 +54,11 @@ namespace TerrariaClone.Features.WorldGen.Debug
                 TileType.Dirt => new Color("#9b7653"),
                 _ => new Color(1f, 1f, 1f),
             };
+        }
+
+        public void SetWorldGenerator(WorldGenerator worldGenerator)
+        {
+            _worldGenerator = worldGenerator;
         }
     }
 }

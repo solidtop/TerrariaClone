@@ -4,12 +4,13 @@ using TerrariaClone.Features.WorldGen.Progress;
 
 namespace TerrariaClone.Features.WorldGen.Debug
 {
-    public partial class WorldGenProgressReporter(WorldGenerator worldGenerator) : Node
+    public partial class WorldGenProgressReporter : IWorldGenDebugger
     {
-        private readonly WorldGenerator _worldGenerator = worldGenerator;
+        private WorldGenerator _worldGenerator;
 
-        public override void _Ready()
+        public void SetWorldGenerator(WorldGenerator worldGenerator)
         {
+            _worldGenerator = worldGenerator;
             _worldGenerator.ProgressUpdated += OnProgressUpdated;
         }
 

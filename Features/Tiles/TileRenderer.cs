@@ -13,6 +13,7 @@ namespace TerrariaClone.Features.Tiles
         private BetterTerrain _terrain;
 
         private readonly Queue<Godot.Collections.Dictionary<Vector2I, int>> _cellDataQueue = [];
+        private readonly Queue<Godot.Collections.Dictionary<Variant, Variant>> _changesetQueue = [];
 
         public override void _Ready()
         {
@@ -28,6 +29,19 @@ namespace TerrariaClone.Features.Tiles
             {
                 GD.Print("Creating changeset...");
                 var changeset = _terrain.CreateTerrainChangeset(cellData);
+                _changesetQueue.Enqueue(changeset);
+            }
+
+            if (_changesetQueue.Count > 0)
+            {
+                var changeset = _changesetQueue.Peek();
+
+                if (_terrain.IsTerrainChangesetReady(changeset))
+                {
+                    GD.Print("Changeset created");
+                    _terrain.ApplyTerrainChangeset(changeset);
+                    _changesetQueue.Dequeue();
+                }
             }
         }
 
@@ -54,6 +68,10 @@ namespace TerrariaClone.Features.Tiles
                         cellData[cellCoord] = tileId;
                     }
                 }
+
+                //GD.Print("Creating changeset...");
+                //var changeset = _terrain.CreateTerrainChangeset(cellData);
+                //_changesetQueue.Enqueue(changeset);
 
                 _cellDataQueue.Enqueue(cellData);
             }

@@ -18,6 +18,9 @@
     <Folder Include="Data\Worlds\TestWorld\WorldGen\Definitions\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Features\Player\player.tscn" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="MessagePack" Version="3.1.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>

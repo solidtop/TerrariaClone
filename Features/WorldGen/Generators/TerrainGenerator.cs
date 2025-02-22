@@ -3,6 +3,7 @@ using TerrariaClone.Features.Tiles;
 using TerrariaClone.Features.World;
 using TerrariaClone.Features.WorldGen.Contexts;
 using TerrariaClone.Features.WorldGen.Progress;
+using TerrariaClone.Features.WorldGen.State;
 
 namespace TerrariaClone.Features.WorldGen.Generators
 {
@@ -25,7 +26,7 @@ namespace TerrariaClone.Features.WorldGen.Generators
 
             for (int x = region.Start.X; x < region.End.X; x++)
             {
-                var height = _heightSpline.Interpolate(_heightNoise.Sample1D(x)) + surfaceLevel;
+                var height = (int)_heightSpline.Interpolate(_heightNoise.Sample1D(x)) + surfaceLevel;
                 var stoneLevel = _stoneOffsetNoise.Sample1D(x) + undergroundLevel;
 
                 for (int y = region.Start.Y; y < region.End.Y; y++)
@@ -39,6 +40,8 @@ namespace TerrariaClone.Features.WorldGen.Generators
                         state.Tiles[x, y] = TileType.Air;
                     }
                 }
+
+                state.HeightMap[x] = height;
             }
         }
     }

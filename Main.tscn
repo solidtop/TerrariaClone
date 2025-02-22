@@ -1,13 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://clg1io70s0cdx"]
+[gd_scene load_steps=4 format=3 uid="uid://clg1io70s0cdx"]
 
 [ext_resource type="Script" path="res://Main.cs" id="1_jsure"]
 [ext_resource type="PackedScene" uid="uid://d03r55otalbgf" path="res://tile_map_layer.tscn" id="2_kc5xn"]
+[ext_resource type="PackedScene" uid="uid://7cuigfpahuo6" path="res://Features/Player/player.tscn" id="3_61a7y"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_jsure")
 
-[node name="Camera2D" type="Camera2D" parent="."]
-anchor_mode = 0
-zoom = Vector2(0.08, 0.08)
-
 [node name="TileMapLayer" parent="." instance=ExtResource("2_kc5xn")]
+
+[node name="Player" parent="." instance=ExtResource("3_61a7y")]
+visible = false
