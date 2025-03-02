@@ -6,6 +6,13 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="Data\Worlds\TestWorld2\WorldGen\Definitions\World.json" />
+    <Content Include="Data\Worlds\TestWorld2\WorldGen\Dirt.json" />
+    <Content Include="Data\Worlds\TestWorld2\WorldGen\LargeCave.json" />
+    <Content Include="Data\Worlds\TestWorld2\WorldGen\SmallCave.json" />
+    <Content Include="Data\Worlds\TestWorld2\WorldGen\Stone.json" />
+    <Content Include="Data\Worlds\TestWorld2\WorldGen\Terrain.json" />
+    <Content Include="Data\Worlds\TestWorld2\WorldGen\World.json" />
     <Content Include="data\worlds\testworld\worldgen\definitions\World.json" />
     <Content Include="data\worlds\testworld\worldgen\Dirt.json" />
     <Content Include="Data\Worlds\TestWorld\WorldGen\SmallCave.json" />

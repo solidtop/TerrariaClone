@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Godot;
-using TerrariaClone.Features.Chunks;
 using TerrariaClone.Features.Tiles;
+using TerrariaClone.Features.WorldStreaming.Chunks;
 
 namespace TerrariaClone.Features.WorldGen.State
 {

@@ -1,38 +1,26 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Godot;
-using TerrariaClone.Features.WorldGen.Debug;
+﻿using System.Threading.Tasks;
+using TerrariaClone.Common.Monitor;
 using TerrariaClone.Features.WorldGen.Generators;
 using TerrariaClone.Features.WorldGen.Initializers;
 
 namespace TerrariaClone.Features.WorldGen.Pipeline
 {
-    public class WorldGenPipeline(WorldGenerator generator, WorldInitializer initializer, IEnumerable<IWorldGenDebugger> debuggers)
+    public class WorldGenPipeline(WorldGenerator generator, WorldInitializer initializer, IProgressMonitor progressMonitor)
     {
         private readonly WorldGenerator _generator = generator;
         private readonly WorldInitializer _initializer = initializer;
-        private readonly List<IWorldGenDebugger> _debuggers = debuggers.ToList();
+
+        public IProgressMonitor ProgressMonitor { get; } = progressMonitor;
 
         public async Task RunAsync()
         {
+            var subTasks = _generator.GeneratorCount + _initializer.InitializerCount;
+            ProgressMonitor.BeginTask("World generation", subTasks);
+
             await _generator.GenerateAsync();
             await _initializer.InitializeAsync();
-        }
 
-        public async Task RunAsync(Node rootNode)
-        {
-            foreach (var debugger in _debuggers)
-            {
-                debugger.SetWorldGenerator(_generator);
-
-                if (debugger is Node node)
-                {
-                    rootNode.AddChild(node);
-                }
-            }
-
-            await RunAsync();
+            ProgressMonitor.CompleteTask();
         }
     }
 }

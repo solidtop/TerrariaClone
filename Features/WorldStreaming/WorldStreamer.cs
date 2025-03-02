@@ -1,13 +1,15 @@
 ﻿using Godot;
-using TerrariaClone.Features.Chunks;
+using TerrariaClone.Features.WorldStreaming.Chunks;
 
-namespace TerrariaClone.Features.World
+namespace TerrariaClone.Features.WorldStreaming
 {
     public partial class WorldStreamer(IChunkStreamer chunkStreamer) : Node
     {
         private readonly IChunkStreamer _chunkStreamer = chunkStreamer;
 
         private Camera2D _camera;
+
+        public IChunkStreamer ChunkStreamer => _chunkStreamer;
 
         public override void _Ready()
         {
@@ -17,7 +19,6 @@ namespace TerrariaClone.Features.World
         public override void _Process(double delta)
         {
             var cameraPosition = _camera.GlobalPosition;
-
             _chunkStreamer.StreamAsync(cameraPosition);
         }
     }

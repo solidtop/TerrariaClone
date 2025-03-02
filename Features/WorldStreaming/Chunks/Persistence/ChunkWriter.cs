@@ -1,7 +1,7 @@
 ﻿using Godot;
 using TerrariaClone.Common.Serialization;
 
-namespace TerrariaClone.Features.Chunks.Persistence
+namespace TerrariaClone.Features.WorldStreaming.Chunks.Persistence
 {
     public class ChunkWriter(ISerializer serializer) : IChunkWriter
     {

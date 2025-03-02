@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Godot;
-using TerrariaClone.Features.Chunks.Persistence;
 using TerrariaClone.Features.Tiles;
+using TerrariaClone.Features.WorldStreaming.Chunks.Persistence;
 
-namespace TerrariaClone.Features.Chunks
+namespace TerrariaClone.Features.WorldStreaming.Chunks
 {
     public partial class ChunkStreamer(ChunkRepository chunkRepository, Vector2I chunkSize, Vector2I streamDistance) : IChunkStreamer
     {
@@ -23,12 +23,24 @@ namespace TerrariaClone.Features.Chunks
 
         private Vector2I _lastCameraChunkPosition = new(-1, -1);
 
-        public event Action<List<Chunk>> ChunksStreamed;
+        public event Action<List<Chunk>> ChunksLoaded;
+        public event Action<List<Chunk>> ChunksUnloaded;
 
         public async Task StreamAsync(Vector2 cameraPosition)
         {
-            await LoadChunksAsync(cameraPosition);
-            await UnloadChunksAsync(cameraPosition);
+            var cameraChunkPosition = new Vector2I(
+                Mathf.RoundToInt(cameraPosition.X / (_chunkSize.X * Tile.Size)),
+                Mathf.RoundToInt(cameraPosition.Y / (_chunkSize.Y * Tile.Size))
+            );
+
+            // Skip update if the camera position hasn't changed
+            if (cameraChunkPosition == _lastCameraChunkPosition)
+                return;
+
+            _lastCameraChunkPosition = cameraChunkPosition;
+
+            await LoadChunksAsync(cameraChunkPosition);
+            await UnloadChunksAsync(cameraChunkPosition);
         }
 
         public void UpdateStreamDistance(Vector2I streamDistance)
@@ -39,16 +51,8 @@ namespace TerrariaClone.Features.Chunks
             _unloadDistance = (streamDistance.X + UnloadBufferDistance) * (streamDistance.X + UnloadBufferDistance);
         }
 
-        private async Task LoadChunksAsync(Vector2 cameraPosition)
+        private async Task LoadChunksAsync(Vector2I cameraChunkPosition)
         {
-            var cameraChunkPosition = GetCameraChunkPosition(cameraPosition);
-
-            // Skip update if the camera position hasn't changed
-            if (cameraChunkPosition == _lastCameraChunkPosition)
-                return;
-
-            _lastCameraChunkPosition = cameraChunkPosition;
-
             var chunkTasks = new List<Task<Chunk>>();
 
             for (int xOffset = -_streamDistance.X; xOffset < _streamDistance.X; xOffset++)
@@ -74,18 +78,11 @@ namespace TerrariaClone.Features.Chunks
             }
 
             var newChunks = await Task.WhenAll(chunkTasks);
-            ChunksStreamed?.Invoke([.. newChunks]);
+            ChunksLoaded?.Invoke([.. newChunks]);
         }
 
-        private async Task UnloadChunksAsync(Vector2 cameraPosition)
+        private async Task UnloadChunksAsync(Vector2I cameraChunkPosition)
         {
-            var cameraChunkPosition = GetCameraChunkPosition(cameraPosition);
-
-            if (cameraChunkPosition == _lastCameraChunkPosition)
-                return;
-
-            _lastCameraChunkPosition = cameraChunkPosition;
-
             var chunkTasks = new List<Task<Chunk>>();
 
             foreach (var chunk in _loadedChunks.Values.ToList())
@@ -99,28 +96,20 @@ namespace TerrariaClone.Features.Chunks
                 }
             }
 
-            await Task.WhenAll(chunkTasks);
+            var oldChunks = await Task.WhenAll(chunkTasks);
+            ChunksUnloaded?.Invoke([.. oldChunks]);
         }
 
         private Chunk LoadChunk(Vector2I chunkPosition)
         {
             var chunk = _chunkRepository.Load(chunkPosition);
-
-            if (_loadedChunks.TryAdd(chunkPosition, chunk))
-            {
-                GD.Print($"Loaded chunk at {chunkPosition}");
-            }
-
+            _loadedChunks.TryAdd(chunkPosition, chunk);
             return chunk;
         }
 
         private Chunk UnloadChunk(Vector2I chunkPosition)
         {
-            if (_loadedChunks.TryRemove(chunkPosition, out var chunk))
-            {
-                GD.Print($"Unloaded chunk at {chunkPosition}");
-            }
-
+            _loadedChunks.TryRemove(chunkPosition, out var chunk);
             return chunk;
         }
 
@@ -131,15 +120,7 @@ namespace TerrariaClone.Features.Chunks
 
         private bool IsChunkWithinBounds(Vector2I chunkPosition)
         {
-            return true;
-        }
-
-        private Vector2I GetCameraChunkPosition(Vector2 cameraPosition)
-        {
-            return new Vector2I(
-                Mathf.RoundToInt(cameraPosition.X / _chunkSize.X * Tile.Size),
-                Mathf.RoundToInt(cameraPosition.Y / _chunkSize.Y * Tile.Size)
-            );
+            return chunkPosition.X >= 0 && chunkPosition.Y >= 0;
         }
     }
 }

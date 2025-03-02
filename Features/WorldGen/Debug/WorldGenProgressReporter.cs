@@ -1,22 +1,15 @@
 ﻿using Godot;
-using TerrariaClone.Features.WorldGen.Generators;
-using TerrariaClone.Features.WorldGen.Progress;
+using TerrariaClone.Common.Monitor;
 
 namespace TerrariaClone.Features.WorldGen.Debug
 {
-    public partial class WorldGenProgressReporter : IWorldGenDebugger
+    public partial class WorldGenProgressReporter(IProgressMonitor progressMonitor)
     {
-        private WorldGenerator _worldGenerator;
+        private readonly IProgressMonitor _progressMonitor = progressMonitor;
 
-        public void SetWorldGenerator(WorldGenerator worldGenerator)
+        private void OnProgressUpdated(string taskName, float progress)
         {
-            _worldGenerator = worldGenerator;
-            _worldGenerator.ProgressUpdated += OnProgressUpdated;
-        }
-
-        private void OnProgressUpdated(WorldGenPass pass, int percentage)
-        {
-            GD.Print($"{WorldGenPassInfo.GetDescription(pass)}: {percentage}%");
+            GD.Print($"{taskName}: {progress * 100}%");
         }
     }
 }

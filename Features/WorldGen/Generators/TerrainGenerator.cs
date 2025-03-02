@@ -2,15 +2,12 @@
 using TerrariaClone.Features.Tiles;
 using TerrariaClone.Features.World;
 using TerrariaClone.Features.WorldGen.Contexts;
-using TerrariaClone.Features.WorldGen.Progress;
 using TerrariaClone.Features.WorldGen.State;
 
 namespace TerrariaClone.Features.WorldGen.Generators
 {
-    public partial class TerrainGenerator : WorldGeneratorBase
+    public partial class TerrainGenerator(string description) : WorldGeneratorBase(description)
     {
-        public override WorldGenPass Pass => WorldGenPass.Terrain;
-
         private PerlinNoise _heightNoise;
         private CubicSpline _heightSpline;
         private PerlinNoise _stoneOffsetNoise;

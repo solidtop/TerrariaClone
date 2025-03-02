@@ -1,7 +1,9 @@
-﻿namespace TerrariaClone.Features.Tiles
+﻿using Godot;
+
+namespace TerrariaClone.Features.Tiles
 {
-    public readonly struct TileMetadata(int id)
+    public readonly struct TileMetadata(Vector2I atlasCoords)
     {
-        public int Id { get; } = id;
+        public Vector2I AtlasCoords { get; } = atlasCoords;
     }
 }

@@ -2,15 +2,12 @@
 using TerrariaClone.Features.Tiles;
 using TerrariaClone.Features.World;
 using TerrariaClone.Features.WorldGen.Contexts;
-using TerrariaClone.Features.WorldGen.Progress;
 using TerrariaClone.Features.WorldGen.State;
 
 namespace TerrariaClone.Features.WorldGen.Generators
 {
-    public class LargeCaveGenerator : WorldGeneratorBase
+    public class LargeCaveGenerator(string description) : WorldGeneratorBase(description)
     {
-        public override WorldGenPass Pass => WorldGenPass.LargeCaves;
-
         private PerlinNoise _caveNoise;
         private PerlinNoise _offsetLevelNoise;
 

@@ -1,8 +1,8 @@
 {
   "Name": "TestWorld",
   "Size": {
-    "X": 1750,
-    "Y": 900
+    "X": 2048,
+    "Y": 1024
   },
   "SurfaceLevel": 120,
   "UndergroundLevel": 200,

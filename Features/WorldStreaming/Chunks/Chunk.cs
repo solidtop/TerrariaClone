@@ -1,7 +1,7 @@
 ﻿using Godot;
 using TerrariaClone.Features.Tiles;
 
-namespace TerrariaClone.Features.Chunks
+namespace TerrariaClone.Features.WorldStreaming.Chunks
 {
     public class Chunk(Vector2I position, Vector2I size, TileType[,] tiles)
     {

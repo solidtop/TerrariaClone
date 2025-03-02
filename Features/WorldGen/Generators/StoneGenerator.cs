@@ -2,15 +2,12 @@
 using TerrariaClone.Features.Tiles;
 using TerrariaClone.Features.World;
 using TerrariaClone.Features.WorldGen.Contexts;
-using TerrariaClone.Features.WorldGen.Progress;
 using TerrariaClone.Features.WorldGen.State;
 
 namespace TerrariaClone.Features.WorldGen.Generators
 {
-    public class StoneGenerator : WorldGeneratorBase
+    public class StoneGenerator(string description) : WorldGeneratorBase(description)
     {
-        public override WorldGenPass Pass => WorldGenPass.Stone;
-
         private PerlinNoise _noise;
 
         public override void Generate(WorldGenContext context, WorldGenState state, WorldRegion region)

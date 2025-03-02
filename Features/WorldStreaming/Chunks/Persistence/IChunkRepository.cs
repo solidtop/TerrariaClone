@@ -1,6 +1,6 @@
 ﻿using Godot;
 
-namespace TerrariaClone.Features.Chunks.Persistence
+namespace TerrariaClone.Features.WorldStreaming.Chunks.Persistence
 {
     public interface IChunkRepository
     {
