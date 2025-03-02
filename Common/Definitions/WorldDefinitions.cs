@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace TerrariaClone.Features.WorldGen.Definitions
+namespace TerrariaClone.Common.Definitions
 {
     public class WorldDefinitions
     {

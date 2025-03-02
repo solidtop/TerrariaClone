@@ -1,4 +1,5 @@
 using Godot;
+using TerrariaClone.Common.Definitions;
 using TerrariaClone.Common.Serialization;
 using TerrariaClone.Features.Tiles;
 using TerrariaClone.Features.WorldGen.Generators;
@@ -14,6 +15,7 @@ public partial class Main : Node
 {
     public class SharedOptions()
     {
+        public WorldDefinitions WorldDefinitions { get; init; }
         public Vector2I ChunkSize { get; init; }
         public IChunkPathProvider ChunkPathProvider { get; init; }
         public ISerializer Serializer { get; init; }
@@ -26,6 +28,7 @@ public partial class Main : Node
 
         var shared = new SharedOptions()
         {
+            WorldDefinitions = WorldDefinitions.Load("./Data/Worlds/TestWorld"),
             ChunkSize = new(16, 16),
             ChunkPathProvider = new ChunkPathProvider("user://"),
             Serializer = serializer,
@@ -54,7 +57,7 @@ public partial class Main : Node
 
     private static WorldGenPipeline BuildWorldGenPipeline(SharedOptions shared)
     {
-        return new WorldGenPipelineBuilder().Configure(options =>
+        return new WorldGenPipelineBuilder(shared.WorldDefinitions).Configure(options =>
         {
             options.Seed = 12345;
             options.ConfigPath = "./Data/Worlds/TestWorld/WorldGen";
@@ -78,7 +81,7 @@ public partial class Main : Node
 
     private static WorldStreamingPipeline BuildStreamingPipeline(SharedOptions shared)
     {
-        return new WorldStreamingPipelineBuilder().Configure(options =>
+        return new WorldStreamingPipelineBuilder(shared.WorldDefinitions).Configure(options =>
         {
             options.ChunkSize = shared.ChunkSize;
             options.StreamDistance = new(5, 3);

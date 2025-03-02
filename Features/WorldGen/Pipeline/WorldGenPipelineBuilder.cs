@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using TerrariaClone.Common.Definitions;
 using TerrariaClone.Common.Monitor;
 using TerrariaClone.Features.WorldGen.Configurations;
 using TerrariaClone.Features.WorldGen.Contexts;
-using TerrariaClone.Features.WorldGen.Definitions;
 using TerrariaClone.Features.WorldGen.Generators;
 using TerrariaClone.Features.WorldGen.Initializers;
 using TerrariaClone.Features.WorldGen.State;
 
 namespace TerrariaClone.Features.WorldGen.Pipeline
 {
-    public class WorldGenPipelineBuilder : IWorldGenPipelineBuilder
+    public class WorldGenPipelineBuilder(WorldDefinitions definitions) : IWorldGenPipelineBuilder
     {
+        private readonly WorldDefinitions _definitions = definitions;
         private readonly WorldGenOptions _options = new();
         private readonly List<IWorldGenerator> _generators = [];
         private readonly List<IWorldInitializer> _initializers = [];
@@ -36,11 +37,10 @@ namespace TerrariaClone.Features.WorldGen.Pipeline
 
         public WorldGenPipeline Build()
         {
-            var definitions = WorldDefinitions.Load(_options.ConfigPath);
             var config = WorldGenConfig.Load(_options);
 
-            var context = new WorldGenContext(_options.Seed, definitions, config);
-            var state = new WorldGenState(definitions.World.Size);
+            var context = new WorldGenContext(_options.Seed, _definitions, config);
+            var state = new WorldGenState(_definitions.World.Size);
 
             var progressMonitor = new ProgressMonitor();
 

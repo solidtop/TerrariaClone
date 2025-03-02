@@ -1,12 +1,15 @@
 ﻿using System;
+using TerrariaClone.Common.Definitions;
 using TerrariaClone.Common.Serialization;
 using TerrariaClone.Features.WorldStreaming.Chunks;
 using TerrariaClone.Features.WorldStreaming.Chunks.Persistence;
 
 namespace TerrariaClone.Features.WorldStreaming.Pipeline
 {
-    public class WorldStreamingPipelineBuilder : IWorldStreamingPipelineBuilder
+    public class WorldStreamingPipelineBuilder(WorldDefinitions definitions) : IWorldStreamingPipelineBuilder
     {
+        private readonly WorldDefinitions _definitions = definitions;
+
         private static readonly ISerializer DefaultSerializer = new MessagePackAdapter();
         private static readonly IChunkReader DefaultChunkReader = new ChunkReader(DefaultSerializer);
         private static readonly IChunkWriter DefaultChunkWriter = new ChunkWriter(DefaultSerializer);
@@ -45,7 +48,7 @@ namespace TerrariaClone.Features.WorldStreaming.Pipeline
         public WorldStreamingPipeline Build()
         {
             var chunkRepository = new ChunkRepository(_chunkReader, _chunkWriter, _chunkPathProvider);
-            var chunkStreamer = new ChunkStreamer(chunkRepository, _options.ChunkSize, _options.StreamDistance);
+            var chunkStreamer = new ChunkStreamer(chunkRepository, _options.ChunkSize, _definitions.World.Size, _options.StreamDistance);
 
             var worldStreamer = new WorldStreamer(chunkStreamer);
 

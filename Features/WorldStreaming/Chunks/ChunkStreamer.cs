@@ -9,10 +9,11 @@ using TerrariaClone.Features.WorldStreaming.Chunks.Persistence;
 
 namespace TerrariaClone.Features.WorldStreaming.Chunks
 {
-    public partial class ChunkStreamer(ChunkRepository chunkRepository, Vector2I chunkSize, Vector2I streamDistance) : IChunkStreamer
+    public partial class ChunkStreamer(ChunkRepository chunkRepository, Vector2I chunkSize, Vector2I worldSize, Vector2I streamDistance) : IChunkStreamer
     {
         private readonly ChunkRepository _chunkRepository = chunkRepository;
         private readonly Vector2I _chunkSize = chunkSize;
+        private readonly Vector2I _worldSize = worldSize;
         private Vector2I _streamDistance = streamDistance;
 
         private readonly ConcurrentDictionary<Vector2I, Chunk> _loadedChunks = [];
@@ -120,7 +121,10 @@ namespace TerrariaClone.Features.WorldStreaming.Chunks
 
         private bool IsChunkWithinBounds(Vector2I chunkPosition)
         {
-            return chunkPosition.X >= 0 && chunkPosition.Y >= 0;
+            var maxChunks = _worldSize / _chunkSize;
+
+            return chunkPosition.X >= 0 && chunkPosition.X < maxChunks.X &&
+                chunkPosition.Y >= 0 && chunkPosition.Y < maxChunks.Y;
         }
     }
 }

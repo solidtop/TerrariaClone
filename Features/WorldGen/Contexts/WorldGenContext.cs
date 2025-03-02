@@ -1,5 +1,5 @@
-﻿using TerrariaClone.Features.WorldGen.Configurations;
-using TerrariaClone.Features.WorldGen.Definitions;
+﻿using TerrariaClone.Common.Definitions;
+using TerrariaClone.Features.WorldGen.Configurations;
 
 namespace TerrariaClone.Features.WorldGen.Contexts
 {

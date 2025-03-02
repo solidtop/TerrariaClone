@@ -1,7 +1,7 @@
 ﻿using Godot;
 using TerrariaClone.Common.Utilities;
 
-namespace TerrariaClone.Features.WorldGen.Definitions
+namespace TerrariaClone.Common.Definitions
 {
     public class WorldDefinition : ConfigLoader<WorldDefinition>
     {
