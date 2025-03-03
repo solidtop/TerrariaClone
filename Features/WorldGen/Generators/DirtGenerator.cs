@@ -1,5 +1,5 @@
 ﻿using TerrariaClone.Common.Utilities;
-using TerrariaClone.Features.Tiles;
+using TerrariaClone.Features.Blocks;
 using TerrariaClone.Features.World;
 using TerrariaClone.Features.WorldGen.Contexts;
 using TerrariaClone.Features.WorldGen.State;
@@ -12,10 +12,10 @@ namespace TerrariaClone.Features.WorldGen.Generators
 
         public override void Generate(WorldGenContext context, WorldGenState state, WorldRegion region)
         {
-            var undergroundLevel = context.Definitions.World.UndergroundLevel;
-
             _noise ??= CreateNoise(context.Seed, context.Config.Dirt.Noise);
+
             var threshold = context.Config.Dirt.Noise.Threshold;
+            var undergroundLevel = context.Definitions.World.UndergroundLevel;
 
             for (int x = region.Start.X; x < region.End.X; x++)
             {
@@ -28,7 +28,7 @@ namespace TerrariaClone.Features.WorldGen.Generators
 
                     if (noiseValue > threshold)
                     {
-                        state.Tiles[x, y] = TileType.Dirt;
+                        state.Blocks[x, y] = BlockType.Dirt;
                     }
                 }
             }

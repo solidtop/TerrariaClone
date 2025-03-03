@@ -10,9 +10,7 @@ namespace TerrariaClone.Features.WorldStreaming.Chunks.Persistence
         public Chunk Read(string path)
         {
             if (!FileAccess.FileExists(path))
-            {
                 return null;
-            }
 
             using var file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
             var data = file.GetBuffer((long)file.GetLength());

@@ -2,9 +2,9 @@
 using Godot;
 using TerrariaClone.Features.WorldStreaming.Chunks;
 
-namespace TerrariaClone.Features.Tiles
+namespace TerrariaClone.Features.Blocks
 {
-    public partial class TileRenderer(IChunkStreamer chunkStreamer) : Node
+    public partial class BlockRenderer(IChunkStreamer chunkStreamer) : Node
     {
         private readonly IChunkStreamer _chunkStreamer = chunkStreamer;
         private TileMapLayer _terrainLayer;
@@ -37,9 +37,9 @@ namespace TerrariaClone.Features.Tiles
                 {
                     for (int y = 0; y < chunk.Size.Y; y++)
                     {
-                        var tile = chunk.Tiles[x, y];
+                        var block = chunk.Blocks[x, y];
 
-                        if (tile == TileType.Air)
+                        if (block == BlockType.Air)
                             continue;
 
                         var cellCoords = chunkWorldPos + new Vector2I(x, y);
@@ -50,7 +50,7 @@ namespace TerrariaClone.Features.Tiles
                             continue;
                         }
 
-                        var atlasCoords = Tile.GetMetadata(tile).AtlasCoords;
+                        var atlasCoords = Block.GetMetadata(block).AtlasCoords;
                         _terrainLayer.SetCell(cellCoords, 0, atlasCoords);
                     }
                 }

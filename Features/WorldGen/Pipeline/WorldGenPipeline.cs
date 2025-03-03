@@ -10,6 +10,7 @@ namespace TerrariaClone.Features.WorldGen.Pipeline
         private readonly WorldGenerator _generator = generator;
         private readonly WorldInitializer _initializer = initializer;
 
+        public WorldGenerator WorldGenerator => _generator;
         public IProgressMonitor ProgressMonitor { get; } = progressMonitor;
 
         public async Task RunAsync()

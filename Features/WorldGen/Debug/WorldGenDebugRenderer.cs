@@ -1,64 +1,59 @@
 ﻿using Godot;
-using TerrariaClone.Features.Tiles;
+using TerrariaClone.Features.Blocks;
 using TerrariaClone.Features.WorldGen.Generators;
 
 namespace TerrariaClone.Features.WorldGen.Debug
 {
-    public partial class WorldGenDebugRenderer : Node2D, IWorldGenDebugger
+    public partial class WorldGenDebugRenderer(WorldGenerator worldGenerator) : Node2D
     {
-        private WorldGenerator _worldGenerator;
+        private readonly WorldGenerator _worldGenerator = worldGenerator;
 
-        private TileType[,] _tiles;
+        private BlockType[,] _blocksToDraw;
 
         public override void _Ready()
         {
             _worldGenerator.GenerationCompleted += OnGenerationCompleted;
         }
 
-        private void OnGenerationCompleted(TileType[,] tiles)
+        private void OnGenerationCompleted(BlockType[,] blocks)
         {
-            _tiles = tiles;
+            _blocksToDraw = blocks;
             QueueRedraw();
         }
 
         public override void _Draw()
         {
-            if (_tiles is null)
+            if (_blocksToDraw is null)
                 return;
 
-            var worldWidth = _tiles.GetLength(0);
-            var worldHeight = _tiles.GetLength(1);
+            var worldWidth = _blocksToDraw.GetLength(0);
+            var worldHeight = _blocksToDraw.GetLength(1);
 
             for (int x = 0; x < worldWidth; x++)
             {
                 for (int y = 0; y < worldHeight; y++)
                 {
-                    var tile = _tiles[x, y];
+                    var block = _blocksToDraw[x, y];
 
-                    if (tile == TileType.Air)
+                    if (block == BlockType.Air)
                         continue;
 
-                    var tileColor = GetTileColor(tile);
+                    var blockColor = GetBlockColor(block);
 
-                    var rect = new Rect2(x * Tile.Size, y * Tile.Size, Tile.Size, Tile.Size);
-                    DrawRect(rect, tileColor, filled: true);
+                    var rect = new Rect2(x * Block.Size, y * Block.Size, Block.Size, Block.Size);
+                    DrawRect(rect, blockColor, filled: true);
                 }
             }
         }
 
-        private static Color GetTileColor(TileType tile)
+        private static Color GetBlockColor(BlockType block)
         {
-            return tile switch
+            return block switch
             {
-                TileType.Stone => new Color("#888C8D"),
-                TileType.Dirt => new Color("#9b7653"),
+                BlockType.Stone => new Color("#888C8D"),
+                BlockType.Dirt => new Color("#9b7653"),
                 _ => new Color(1f, 1f, 1f),
             };
-        }
-
-        public void SetWorldGenerator(WorldGenerator worldGenerator)
-        {
-            _worldGenerator = worldGenerator;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using TerrariaClone.Common.Utilities;
-using TerrariaClone.Features.Tiles;
+using TerrariaClone.Features.Blocks;
 using TerrariaClone.Features.World;
 using TerrariaClone.Features.WorldGen.Contexts;
 using TerrariaClone.Features.WorldGen.State;
@@ -13,12 +13,11 @@ namespace TerrariaClone.Features.WorldGen.Generators
 
         public override void Generate(WorldGenContext context, WorldGenState state, WorldRegion region)
         {
-            var undergroundLevel = context.Definitions.World.UndergroundLevel;
-
             _caveNoise ??= CreateNoise(context.Seed, context.Config.LargeCave.CaveNoise);
-            var hollowness = context.Config.LargeCave.CaveNoise.Threshold;
-
             _offsetLevelNoise ??= CreateNoise(context.Seed, context.Config.LargeCave.OffsetLevelNoise);
+
+            var undergroundLevel = context.Definitions.World.UndergroundLevel;
+            var hollowness = context.Config.LargeCave.CaveNoise.Threshold;
 
             for (int x = region.Start.X; x < region.End.X; x++)
             {
@@ -33,7 +32,7 @@ namespace TerrariaClone.Features.WorldGen.Generators
 
                     if (noiseValue > hollowness)
                     {
-                        state.Tiles[x, y] = TileType.Air;
+                        state.Blocks[x, y] = BlockType.Air;
                     }
                 }
             }

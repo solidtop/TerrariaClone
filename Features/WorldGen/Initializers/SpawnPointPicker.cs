@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using TerrariaClone.Features.Tiles;
+using TerrariaClone.Features.Blocks;
 using TerrariaClone.Features.WorldGen.Contexts;
 using TerrariaClone.Features.WorldGen.State;
 
@@ -12,7 +12,7 @@ namespace TerrariaClone.Features.WorldGen.Initializers
             var worldWidth = context.Definitions.World.Size.X;
 
             var spawnX = worldWidth / 2;
-            var spawnY = (state.HeightMap[spawnX] - 4) * Tile.Size;
+            var spawnY = (state.HeightMap[spawnX] - 4) * Block.Size;
 
             state.PlayerSpawnPoint = new(spawnX, spawnY);
 

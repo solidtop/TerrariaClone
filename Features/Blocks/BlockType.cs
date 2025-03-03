@@ -1,6 +1,6 @@
-﻿namespace TerrariaClone.Features.Tiles
+﻿namespace TerrariaClone.Features.Blocks
 {
-    public enum TileType
+    public enum BlockType
     {
         Air,
         Stone,

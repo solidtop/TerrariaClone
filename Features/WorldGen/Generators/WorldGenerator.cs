@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Godot;
 using TerrariaClone.Common.Monitor;
-using TerrariaClone.Features.Tiles;
+using TerrariaClone.Features.Blocks;
 using TerrariaClone.Features.World;
 using TerrariaClone.Features.WorldGen.Contexts;
 using TerrariaClone.Features.WorldGen.State;
@@ -21,7 +21,7 @@ namespace TerrariaClone.Features.WorldGen.Generators
         private readonly Vector2I _regionSize = context.Config.RegionSize;
 
         public event Action<int, string> ProgressUpdated;
-        public event Action<TileType[,]> GenerationCompleted;
+        public event Action<BlockType[,]> GenerationCompleted;
 
         public async Task GenerateAsync()
         {
@@ -49,7 +49,7 @@ namespace TerrariaClone.Features.WorldGen.Generators
                 _progressMonitor.CompleteTask();
             }
 
-            GenerationCompleted?.Invoke(_state.Tiles);
+            GenerationCompleted?.Invoke(_state.Blocks);
         }
 
         public int GeneratorCount => _generators.Count;

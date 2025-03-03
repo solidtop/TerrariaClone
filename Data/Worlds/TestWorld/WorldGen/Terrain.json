@@ -1,6 +1,4 @@
 {
-  "DefaultTile": "Stone",
-  "DefaultFluid": "Stone",
   "HeightNoise": {
     "Octaves": 6,
     "Frequency": 0.2,

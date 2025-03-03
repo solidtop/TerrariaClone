@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Godot;
-using TerrariaClone.Features.Tiles;
+using TerrariaClone.Features.Blocks;
 using TerrariaClone.Features.WorldStreaming.Chunks.Persistence;
 
 namespace TerrariaClone.Features.WorldStreaming.Chunks
@@ -30,8 +30,8 @@ namespace TerrariaClone.Features.WorldStreaming.Chunks
         public async Task StreamAsync(Vector2 cameraPosition)
         {
             var cameraChunkPosition = new Vector2I(
-                Mathf.RoundToInt(cameraPosition.X / (_chunkSize.X * Tile.Size)),
-                Mathf.RoundToInt(cameraPosition.Y / (_chunkSize.Y * Tile.Size))
+                Mathf.RoundToInt(cameraPosition.X / (_chunkSize.X * Block.Size)),
+                Mathf.RoundToInt(cameraPosition.Y / (_chunkSize.Y * Block.Size))
             );
 
             // Skip update if the camera position hasn't changed

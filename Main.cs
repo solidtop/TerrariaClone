@@ -1,7 +1,7 @@
 using Godot;
 using TerrariaClone.Common.Definitions;
 using TerrariaClone.Common.Serialization;
-using TerrariaClone.Features.Tiles;
+using TerrariaClone.Features.WorldGen.Debug;
 using TerrariaClone.Features.WorldGen.Generators;
 using TerrariaClone.Features.WorldGen.Initializers;
 using TerrariaClone.Features.WorldGen.Pipeline;
@@ -13,6 +13,9 @@ namespace TerrariaClone;
 
 public partial class Main : Node
 {
+    private bool _showWorldGenDebug = true;
+    private bool _showChunkDebug = false;
+
     public class SharedOptions()
     {
         public WorldDefinitions WorldDefinitions { get; init; }
@@ -39,20 +42,18 @@ public partial class Main : Node
         var worldGenPipeline = BuildWorldGenPipeline(shared);
         var streamPipeline = BuildStreamingPipeline(shared);
 
-        worldGenPipeline.ProgressMonitor.ProgressChanged += (taskName, progress) =>
-        {
-            GD.Print($"{taskName}: {Mathf.FloorToInt(progress * 100)}%");
-        };
+        if (_showWorldGenDebug)
+            EnableWorldGenDebug(worldGenPipeline);
 
         // Run the pipelines
         await worldGenPipeline.RunAsync();
-        streamPipeline.Run(this);
+        //streamPipeline.Run(this);
 
-        var chunkDebug = new ChunkDebugRenderer(streamPipeline.ChunkStreamer);
-        AddChild(chunkDebug);
+        //if (_showChunkDebug)
+        //    EnableStreamingDebug(streamPipeline);
 
-        var tileRenderer = new TileRenderer(streamPipeline.ChunkStreamer);
-        AddChild(tileRenderer);
+        //var blockRenderer = new BlockRenderer(streamPipeline.ChunkStreamer);
+        //AddChild(blockRenderer);
     }
 
     private static WorldGenPipeline BuildWorldGenPipeline(SharedOptions shared)
@@ -84,11 +85,28 @@ public partial class Main : Node
         return new WorldStreamingPipelineBuilder(shared.WorldDefinitions).Configure(options =>
         {
             options.ChunkSize = shared.ChunkSize;
-            options.StreamDistance = new(5, 3);
+            options.StreamDistance = new(3, 2);
         })
         .WithChunkReader(new ChunkReader(shared.Serializer))
         .WithChunkWriter(shared.ChunkWriter)
         .WithChunkPathProvider(shared.ChunkPathProvider)
         .Build();
+    }
+
+    private void EnableWorldGenDebug(WorldGenPipeline pipeline)
+    {
+        pipeline.ProgressMonitor.ProgressChanged += (taskName, progress) =>
+        {
+            GD.Print($"{taskName}: {Mathf.FloorToInt(progress * 100)}%");
+        };
+
+        var debugRenderer = new WorldGenDebugRenderer(pipeline.WorldGenerator);
+        AddChild(debugRenderer);
+    }
+
+    private void EnableStreamingDebug(WorldStreamingPipeline pipeline)
+    {
+        var debugRenderer = new ChunkDebugRenderer(pipeline.ChunkStreamer);
+        AddChild(debugRenderer);
     }
 }

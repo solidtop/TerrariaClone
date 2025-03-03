@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://clg1io70s0cdx"]
+[gd_scene load_steps=3 format=3 uid="uid://clg1io70s0cdx"]
 
 [ext_resource type="Script" path="res://Main.cs" id="1_jsure"]
 [ext_resource type="PackedScene" uid="uid://d03r55otalbgf" path="res://tile_map_layer.tscn" id="2_kc5xn"]
-[ext_resource type="Script" path="res://Camera.cs" id="4_3jbf6"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_jsure")
@@ -10,4 +9,5 @@ script = ExtResource("1_jsure")
 [node name="TileMapLayer" parent="." instance=ExtResource("2_kc5xn")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-script = ExtResource("4_3jbf6")
+anchor_mode = 0
+zoom = Vector2(0.08, 0.08)
